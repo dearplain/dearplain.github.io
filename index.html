@@ -23,7 +23,7 @@
 <body>
     <div class="pagehead" style="text-align: center">
         <div style="padding-top:2em;">
-            <input type="text" id="idinput" style="width: 50%;font-size: 16px;" placeholder="例如: http://www.docin.com/p-115191243.html，填115191243"/>
+            <input type="text" id="idinput" style="width: 50%;font-size: 16px;" placeholder="例如: http://www.docin.com/p-115191243.html"/>
             <button style="margin-left: 1em;" onclick="clearpage();loadpage();">查看</button>
         </div>
     </div>
@@ -35,14 +35,14 @@
         var loadend = false;
         var loadingImage = false;
         var page = 1;
-        var file = 115191243;
+        var file = "http://www.docin.com/p-115191243.html";
 
         document.addEventListener("scroll", function (event) {
             checkForNewDiv();
         });
 
         var checkForNewDiv = function() {
-            if (loadend || loadingImage == true || file == "") {
+            if (loadend == true || loadingImage == true || file == "") {
                 return;
             }
             var lastDiv = document.querySelector("#scroll-content > div:last-child");
@@ -63,14 +63,20 @@
 
         function loadpage() {
             var newDiv = document.createElement("div");
+            var fileno = file.match(/[0-9]+/g);
+            if (fileno == null) {
+                loadend = true;
+                return;
+            }
             document.getElementById("scroll-content").appendChild(newDiv);
-            loadImage(newDiv, "http://211.147.220.164/index.jsp?file="+file+"&width=800&pageno="+page, showImage);
+            loadImage(newDiv, "http://211.147.220.164/index.jsp?file="+fileno[0]+"&width=800&pageno="+page, showImage);
             page++;
         }
 
         function clearpage() {
             file = document.getElementById("idinput").value;
             page = 1;
+            loadend = false;
             document.getElementById("scroll-content").innerHTML = "<div></div>";
         }
 
