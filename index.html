@@ -3,15 +3,100 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>abc</title>
+    <title>Good Morning</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script> -->
+    <style type="text/css">
+        body, html {
+            margin: 0;
+            padding: 0;
+            }
+        .pagehead {
+            background-color: #fafbfc;
+            border-bottom: 1px solid #e1e4e8;
+            height: 5em;
+        }
+        .imgpage {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <img src="http://211.147.220.164/index.jsp?file=115191243&width=800&pageno=1"/>
-    <img src="http://211.147.220.164/index.jsp?file=115191243&width=800&pageno=2"/>
-    <img src="http://211.147.220.164/index.jsp?file=115191243&width=800&pageno=3"/>
-    <img src="http://211.147.220.164/index.jsp?file=115191243&width=800&pageno=4"/>
+    <div class="pagehead" style="text-align: center">
+        <div style="padding-top:2em;">
+            <input type="text" id="idinput" style="width: 50%;font-size: 16px;" placeholder="例如: http://www.docin.com/p-115191243.html，填115191243"/>
+            <button style="margin-left: 1em;" onclick="clearpage();loadpage();">查看</button>
+        </div>
+    </div>
+    <div class="imgpage" id="scroll-content">
+        <div>
+        </div>
+    </div>
+    <script>
+        var loadend = false;
+        var loadingImage = false;
+        var page = 1;
+        var file = 115191243;
+
+        document.addEventListener("scroll", function (event) {
+            checkForNewDiv();
+        });
+
+        var checkForNewDiv = function() {
+            if (loadend || loadingImage == true || file == "") {
+                return;
+            }
+            var lastDiv = document.querySelector("#scroll-content > div:last-child");
+            var lastDivOffset = lastDiv.offsetTop + lastDiv.clientHeight;
+            var pageOffset = window.pageYOffset + window.innerHeight;
+
+            if(pageOffset > lastDivOffset - 20) {
+                // var newDiv = document.createElement("div");
+                // newDiv.innerHTML = "my awesome new div";
+                // document.getElementById("scroll-content").appendChild(newDiv);
+                // checkForNewDiv();
+                loadpage();
+            }
+            // if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+            //     loadpage();
+            // }
+        };
+
+        function loadpage() {
+            var newDiv = document.createElement("div");
+            document.getElementById("scroll-content").appendChild(newDiv);
+            loadImage(newDiv, "http://211.147.220.164/index.jsp?file="+file+"&width=800&pageno="+page, showImage);
+            page++;
+        }
+
+        function clearpage() {
+            file = document.getElementById("idinput").value;
+            page = 1;
+            document.getElementById("scroll-content").innerHTML = "<div></div>";
+        }
+
+        function showImage(obj) {
+            //obj.src = this.src;
+            obj.appendChild(this);
+            loadingImage = false;
+            checkForNewDiv();
+        }
+
+        function loadImage(obj,url,callback) {
+            var img = new Image();
+            img.src = url;
+            loadingImage = true;
+            if (img.complete) {
+                callback.call(img,obj);
+                return;
+            }
+            img.onload = function() {
+                callback.call(img,obj);
+            }
+            img.loaderr = function() {
+                loadend = true;
+            }
+        }
+        loadpage();
+    </script>
 </body>
 </html>
