@@ -22,8 +22,8 @@
 </head>
 <body>
     <div class="pagehead" style="text-align: center">
-        <div style="padding-top:2em;">
-            <input type="text" id="idinput" style="width: 50%;font-size: 16px;" placeholder="例如: http://www.docin.com/p-115191243.html"/>
+        <div style="padding-top:2em;font-size: 16px;">
+            <input type="text" id="idinput" style="width: 50%;" placeholder="例如: http://www.docin.com/p-115191243.html"/>
             <button style="margin-left: 1em;" onclick="clearpage();loadpage();">查看</button>
         </div>
     </div>
@@ -69,7 +69,7 @@
                 return;
             }
             document.getElementById("scroll-content").appendChild(newDiv);
-            loadImage(newDiv, "http://211.147.220.164/index.jsp?file="+fileno[0]+"&width=1200&pageno="+page, showImage);
+            loadImage(newDiv, "http://211.147.220.164/index.jsp?file="+fileno[0]+"&width=1000&pageno="+page, showImage);
             page++;
         }
 
@@ -98,7 +98,7 @@
             img.onload = function() {
                 callback.call(img,obj);
             }
-            img.loaderr = function() {
+            img.onerror = function() {
                 loadend = true;
             }
         }
